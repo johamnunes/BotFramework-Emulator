@@ -31,70 +31,14 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import { css } from 'glamor';
 import * as React from 'react';
 
-import * as ChatActions from '../../../../data/action/chatActions';
-import store from '../../../../data/store';
-import { Colors, Fonts } from '@bfemulator/ui-react';
-import { ExtensionManager, InspectorAPI } from '../../../../extensions';
+import * as ChatActions from '../../../../../data/action/chatActions';
+import * as styles from './log.scss';
+import store from '../../../../../data/store';
+import { ExtensionManager, InspectorAPI } from '../../../../../extensions';
 import { LogEntry, LogItem, LogLevel } from '@bfemulator/app-shared';
-import { CommandServiceImpl } from '../../../../platform/commands/commandServiceImpl';
-
-const CSS = css({
-  height: '100%',
-  overflow: 'auto',
-  userSelect: 'text',
-  padding: '0 16px 0 16px',
-  boxSizing: 'border-box',
-
-  '& > .entry': {
-    fontFamily: Fonts.FONT_FAMILY_MONOSPACE,
-
-    '& > .source': {
-      color: Colors.LOG_PANEL_SOURCE_DARK,
-    },
-
-    '& .timestamp': {
-      color: Colors.LOG_PANEL_TIMESTAMP_DARK,
-    },
-
-    '& .src-dst': {
-      color: Colors.LOG_PANEL_SRC_DST_DARK,
-    },
-
-    '& a': {
-      color: Colors.LOG_PANEL_LINK_DARK,
-      textDecoration: 'underline',
-      cursor: 'pointer',
-    },
-
-    // info
-    '& .level-0': {
-      color: Colors.LOG_PANEL_INFO_DARK,
-    },
-    // debug
-    '& .level-1': {
-      color: Colors.LOG_PANEL_DEBUG_DARK,
-    },
-    // warn
-    '& .level-2': {
-      color: Colors.LOG_PANEL_WARN_DARK,
-    },
-    // error
-    '& .level-3': {
-      color: Colors.LOG_PANEL_ERROR_DARK,
-    },
-
-    '& .spaced': {
-      marginLeft: '8px',
-    },
-
-    '& .spaced:first-child': {
-      marginLeft: 0
-    },
-  },
-});
+import { CommandServiceImpl } from '../../../../../platform/commands/commandServiceImpl';
 
 function number2(n: number) {
   return ('0' + n).slice(-2);
@@ -111,13 +55,13 @@ function timestamp(t: number) {
 function logLevelToClassName(level: LogLevel): string {
   switch (level) {
     case LogLevel.Debug:
-      return 'level-1';
+      return styles.level1;
     case LogLevel.Info:
-      return 'level-0';
+      return styles.level0;
     case LogLevel.Warn:
-      return 'level-2';
+      return styles.level2;
     case LogLevel.Error:
-      return 'level-3';
+      return styles.level3;
     default:
       return '';
   }
@@ -153,7 +97,7 @@ export default class Log extends React.Component<LogProps, LogState> {
   render() {
     let key = 0;
     return (
-      <div { ...CSS } ref={ ref => this.scrollMe = ref }>
+      <div className={ styles.log } ref={ ref => this.scrollMe = ref }>
         {
           this.props.document.log.entries.map(entry =>
             <LogEntryComponent key={ `entry-${key++}` } entry={ entry } document={ this.props.document }/>
@@ -185,7 +129,7 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
 
   render() {
     return (
-      <div key="entry" className="entry">
+      <div key="entry" className={ styles.entry }>
         { this.renderTimestamp(this.props.entry.timestamp) }
         { this.props.entry.items.map((item, key) => this.renderItem(item, '' + key)) }
       </div>
@@ -194,8 +138,8 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
 
   renderTimestamp(t: number) {
     return (
-      <span key="timestamp" className="spaced">
-        [<span className="timestamp">{ timestamp(t) }</span>]
+      <span key="timestamp" className={ styles.spaced }>
+        [<span className={ styles.timestamp }>{ timestamp(t) }</span>]
       </span>
     );
   }
@@ -237,7 +181,7 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
 
   renderTextItem(level: LogLevel, text: string, key: string) {
     return (
-      <span key={ key } className={ `spaced ${logLevelToClassName(level)}` }>
+      <span key={ key } className={ `${styles.spaced} ${logLevelToClassName(level)}` }>
         { text }
       </span>
     );
@@ -245,7 +189,7 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
 
   renderExternalLinkItem(text: string, hyperlink: string, key: string) {
     return (
-      <span key={ key } className="spaced">
+      <span key={ key } className={ styles.spaced }>
         <a onClick={ () => window.open(hyperlink, '_blank') }>{ text }</a>
       </span>
     );
@@ -253,7 +197,7 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
 
   renderAppSettingsItem(text: string, key: string) {
     return (
-      <span key={ key } className="spaced">
+      <span key={ key } className={ styles.spaced }>
         <a onClick={ () => CommandServiceImpl.call('shell:show-app-settings') }>{ text }</a>
       </span>
     );
@@ -261,7 +205,7 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
 
   renderExceptionItem(err: Error, key: string) {
     return (
-      <span key={ key } className="spaced level-3">
+      <span key={ key } className={ `${styles.spaced} ${styles.level3}` }>
         { err && err.message ? err.message : '' }
       </span>
     );
@@ -275,10 +219,10 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
     let summaryText = this.summaryText(obj) || '';
     return (
       <span key={ key }>
-        <span className="spaced level-0">
+        <span className={ `${styles.spaced} ${styles.level0}` }>
           <a onClick={ () => this.inspectAndHighlight(obj) }>{ title }</a>
         </span>
-        <span className="spaced level-0">
+        <span className={ `${styles.spaced} ${styles.level0}` }>
           { summaryText }
         </span>
       </span>
@@ -298,13 +242,13 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
     }
     if (obj) {
       return (
-        <span key={ key } className="spaced level-0">
+        <span key={ key } className={ `${styles.spaced} ${styles.level0}` }>
           <a onClick={ () => this.inspect(obj) }>{ method }</a>
         </span>
       );
     } else {
       return (
-        <span key={ key } className="spaced level-0">
+        <span key={ key } className={ `${styles.spaced} ${styles.level0}` }>
           { method }
         </span>
       );
@@ -325,13 +269,13 @@ class LogEntryComponent extends React.Component<LogEntryProps> {
     }
     if (obj) {
       return (
-        <span key={ key } className="spaced level-0">
+        <span key={ key } className={ `${styles.spaced} ${styles.level0}` }>
           <a onClick={ () => this.inspect(obj) }>{ statusCode }</a>
         </span>
       );
     } else {
       return (
-        <span key={ key } className="spaced level-0">
+        <span key={ key } className={ `${styles.spaced} ${styles.level0}` }>
           { statusCode }
         </span>
       );

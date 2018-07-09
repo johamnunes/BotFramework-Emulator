@@ -34,19 +34,12 @@
 import * as React from 'react';
 import { DragEvent } from 'react';
 import { connect } from 'react-redux';
-import { css } from 'glamor';
+import * as styles from './contentOverlay.scss';
+import * as overlay from '../overlay.scss';
 
-import { OVERLAY_CSS } from './overlayStyle';
-import * as EditorActions from '../../../../data/action/editorActions';
-import { getTabGroupForDocument } from '../../../../data/editorHelpers';
-import { RootState } from '../../../../data/store';
-
-const CSS = css({
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0
-}, OVERLAY_CSS);
+import * as EditorActions from '../../../../../data/action/editorActions';
+import { getTabGroupForDocument } from '../../../../../data/editorHelpers';
+import { RootState } from '../../../../../data/store';
 
 interface ContentOverlayProps {
   documentId?: string;
@@ -86,7 +79,7 @@ class ContentOverlayComponent extends React.Component<ContentOverlayProps, Conte
     e.stopPropagation();
   }
 
-  onDragLeave(_e: DragEvent<HTMLDivElement>) {
+  onDragLeave() {
     this.setState(({ draggedOver: false }));
   }
 
@@ -108,13 +101,13 @@ class ContentOverlayComponent extends React.Component<ContentOverlayProps, Conte
   }
 
   render() {
-    let overlayClassName = this.state.draggedOver ? ' dragged-over-overlay' : '';
-    overlayClassName += (this.props.draggingTab ? ' enabled-for-drop' : '');
+    let overlayClassName = this.state.draggedOver ? overlay.draggedOverOverlay : '';
+    overlayClassName += (this.props.draggingTab ? overlay.enabledForDrop : '');
 
     return (
-      <div className={ CSS + overlayClassName }
-        onDragEnterCapture={ this.onDragEnter } onDragLeave={ this.onDragLeave }
-        onDragOverCapture={ this.onDragOver } onDropCapture={ this.onDrop } />
+      <div className={ `${overlay.overlay} ${styles.contentOverlay} ${overlayClassName}` }
+           onDragEnterCapture={ this.onDragEnter } onDragLeave={ this.onDragLeave }
+           onDragOverCapture={ this.onDragOver } onDropCapture={ this.onDrop }/>
     );
   }
 }

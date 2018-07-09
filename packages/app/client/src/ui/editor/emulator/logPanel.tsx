@@ -51,7 +51,7 @@ export default class LogPanel extends React.Component<LogPanelProps, {}> {
       <div { ...CSS }>
         <Panel title="Log">
           <PanelContent>
-            <Log document={ this.props.document } key={ this.props.document.pingId } />
+            <Log document={ this.props.document } key={ this.props.document.pingId }/>
           </PanelContent>
         </Panel>
       </div>

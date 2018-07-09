@@ -31,26 +31,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import { css } from 'glamor';
+import { ExpandCollapse, ExpandCollapseContent } from '@bfemulator/ui-react';
 import * as React from 'react';
-
-import { Colors, ExpandCollapse, ExpandCollapseContent } from '@bfemulator/ui-react';
-
-const CSS = css({
-  backgroundColor: Colors.EXPLORER_BACKGROUND_DARK,
-  color: Colors.EXPLORER_FOREGROUND_DARK,
-  display: 'flex',
-  flex: 1,
-  flexDirection: 'column',
-  listStyleType: 'none',
-  margin: 0,
-  padding: 0,
-
-  '& .explorer-empty-state': {
-    padding: '16px',
-    overflow: 'hidden',
-  }
-});
+import * as styles from './botNotOpenExplorer.scss';
 
 export class BotNotOpenExplorer extends React.Component<{}, {}> {
   constructor(props: {}) {
@@ -59,14 +42,14 @@ export class BotNotOpenExplorer extends React.Component<{}, {}> {
 
   render() {
     return (
-      <ul { ...CSS }>
+      <ul className={ styles.botNotOpenExplorer }>
         <li>
           <ExpandCollapse
             expanded={ true }
             title="No Bot Selected"
           >
             <ExpandCollapseContent>
-              <div className="explorer-empty-state">
+              <div className={ styles.explorerEmptyState }>
               </div>
             </ExpandCollapseContent>
           </ExpandCollapse>

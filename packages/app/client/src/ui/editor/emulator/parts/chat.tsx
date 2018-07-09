@@ -30,111 +30,19 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-
-import { Colors } from '@bfemulator/ui-react';
+import * as React from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
-import { css } from 'glamor';
 import { IEndpointService } from 'msbot/bin/schema';
 import { SpeechTokenInfo } from '@bfemulator/app-shared';
-import * as React from 'react';
-import * as WebChat from 'botframework-webchat';
-
-import { CommandServiceImpl } from '../../../../platform/commands/commandServiceImpl';
-import { EmulatorMode } from '..';
-import memoize from '../../../helpers/memoize';
+import { Chat as WebChat, Speech } from 'botframework-webchat';
+import { CommandServiceImpl } from '../../../../../platform/commands/commandServiceImpl';
+import { EmulatorMode } from '../../index';
+import memoize from '../../../../helpers/memoize';
+import * as styles from './chat.scss';
 
 const CognitiveServices = require('botframework-webchat/CognitiveServices');
 const AdaptiveCardsHostConfig = require('botframework-webchat/adaptivecards-hostconfig.json');
-
-const CSS = css({
-  backgroundColor: 'white',
-  height: '100%',
-  display: 'flex',
-
-  '& .wc-chatview-panel': {
-    flex: 1,
-    position: 'relative',
-
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'blue',
-      color: 'red',
-    },
-
-    '& p': {
-      marginBottom: 0,
-      marginTop: 0,
-    },
-
-    '& h1, & h2, & h3, & h4': {
-      marginTop: '8px',
-      marginBottom: '4px',
-    },
-
-    '& br': {
-      content: ' ',
-      display: 'block',
-      fontSize: '50%',
-    },
-
-    '& ol, & ul': {
-      marginTop: 0,
-    },
-
-    '& .wc-message-content *': {
-      userSelect: 'text',
-    },
-
-    '& .wc-message-content.selected': {
-      color: 'black',
-      backgroundColor: Colors.WEBCHAT_SELECTED_BACKGROUND_DARK,
-      boxShadow: '0px 1px 1px 0px rgba(0,0,0,0.2)',
-    },
-
-    '& .wc-message-content.selected>svg.wc-message-callout>path': {
-      fill: Colors.WEBCHAT_SELECTED_BACKGROUND_DARK,
-    },
-
-    '& .wc-card': {
-      color: '#000',
-    },
-
-    '& .wc-card button': {
-      border: '1px solid #ccc',
-      borderRadius: '1px',
-      cursor: 'pointer',
-      outline: 'none',
-      transition: 'color .2s ease, background-color .2s ease',
-      backgroundColor: 'transparent',
-      color: '#0078D7',
-      minHeight: '32px',
-      width: '100%',
-      padding: '0 16px',
-    },
-
-    '& .wc-list ul': {
-      padding: 0,
-    },
-
-    '& .clickable:hover': {
-      cursor: 'pointer'
-    },
-  }
-});
-
-const DISCONNECTED_CSS = css({
-  padding: '16px',
-  backgroundColor: 'white',
-  height: '100%',
-  display: 'flex',
-  alignItems: 'flex-start',
-  flexAlign: 'center',
-
-  '& .start-button': {
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: '0px',
-  },
-});
 
 export interface Props {
   document: any;
@@ -167,7 +75,7 @@ function createWebChatProps(
           fetchCallback: getSpeechToken.bind(null, endpoint, false),
           fetchOnExpiryCallback: getSpeechToken.bind(null, endpoint, true)
         }),
-        speechSynthesizer: new WebChat.Speech.BrowserSpeechSynthesizer()
+        speechSynthesizer: new Speech.BrowserSpeechSynthesizer()
       } : null,
     user: {
       id: userId || 'default-user',
@@ -209,8 +117,8 @@ async function getSpeechToken(endpoint: IEndpointService, refresh: boolean): Pro
   }
 }
 
-class Chat extends React.Component<Props> {
-    createWebChatPropsMemoized: (
+class Chat extends Component<Props> {
+  createWebChatPropsMemoized: (
     botId: string,
     userId: string,
     directLine: any,
@@ -239,8 +147,8 @@ class Chat extends React.Component<Props> {
       );
 
       return (
-        <div id="webchat-container" className="wc-app wc-wide" { ...CSS }>
-          <WebChat.Chat
+        <div id="webchat-container" className={ `${styles.chat} wc-app` }>
+          <WebChat
             key={ document.directLine.token }
             { ...webChatProps }
           />
@@ -248,7 +156,7 @@ class Chat extends React.Component<Props> {
       );
     } else {
       return (
-        <div { ...DISCONNECTED_CSS }>
+        <div className={ styles.disconnected }>
           Not Connected
         </div>
       );

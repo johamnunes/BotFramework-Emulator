@@ -32,25 +32,14 @@
 //
 
 import * as React from 'react';
-import { css } from 'glamor';
+import * as styles from './botExplorerBar.scss';
 
-import { EndpointExplorerContainer } from './endpointExplorer';
-import { ExplorerBarBody } from './explorerBarBody';
-import { ExplorerBarHeader, Title } from './explorerBarHeader';
-import { FileExplorer } from './fileExplorer';
-import { BotNotOpenExplorer } from './botNotOpenExplorer';
+import { EndpointExplorerContainer } from '../endpointExplorer';
+import { ExplorerBarBody } from '../explorerBarBody';
+import { ExplorerBarHeader, Title } from '../explorerBarHeader/explorerBarHeader';
+import { TranscriptExplorer } from '../transcriptExplorer';
+import { BotNotOpenExplorer } from '../botNotOpenExplorer/botNotOpenExplorer';
 import { IBotConfig } from 'msbot/bin/schema';
-
-const CSS = css({
-  height: '100%',
-  width: '100%',
-
-  '&.explorer-offscreen': {
-    position: 'absolute',
-    top: '5000px',
-    display: 'none'
-  }
-});
 
 interface BotExplorerBarProps {
   activeBot: IBotConfig;
@@ -62,28 +51,31 @@ export default class BotExplorerBar extends React.Component<BotExplorerBarProps>
     super(props);
   }
 
-  render() {
-    const className = this.props.hidden ? 'explorer-offscreen' : '';
-
+  private get activeBotJsx(): JSX.Element {
     return (
-      <div className={ className }  { ...CSS }>
+      <>
+        <EndpointExplorerContainer title="Endpoint"/>
+        <TranscriptExplorer/>
+      </>
+    );
+  }
+
+  private get botNotOpenJsx(): JSX.Element {
+    return <BotNotOpenExplorer/>;
+  }
+
+  render() {
+    const className = this.props.hidden ? styles.explorerOffScreen : '';
+    const explorerBody = this.props.activeBot ? this.activeBotJsx : this.botNotOpenJsx;
+    return (
+      <div className={ `${styles.botExplorerBar} ${className}` }>
         <ExplorerBarHeader>
           <Title>
             Bot Explorer
           </Title>
         </ExplorerBarHeader>
         <ExplorerBarBody>
-          { this.props.activeBot ? (
-            <>
-              <EndpointExplorerContainer title="Endpoint" />
-              <FileExplorer />
-            </>
-          )
-            :
-            (
-              <BotNotOpenExplorer />
-            )
-          }
+          { explorerBody }
         </ExplorerBarBody>
       </div>
     );

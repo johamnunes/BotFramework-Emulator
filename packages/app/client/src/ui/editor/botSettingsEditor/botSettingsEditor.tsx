@@ -33,7 +33,8 @@
 
 import { BotInfo, SharedConstants } from '@bfemulator/app-shared';
 import { BotConfigWithPath, BotConfigWithPathImpl } from '@bfemulator/sdk-shared';
-import { Column, MediumHeader, PrimaryButton, Row, TextField } from '@bfemulator/ui-react';
+import { Column, MediumHeader, Row } from '@bfemulator/ui-react';
+import { PrimaryButton, TextField } from '@bfemulator/ui-react';
 import { IConnectedService, ServiceType } from 'msbot/bin/schema';
 import * as React from 'react';
 import { connect } from 'react-redux';

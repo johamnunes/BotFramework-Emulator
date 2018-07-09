@@ -32,7 +32,30 @@
 //
 
 import * as React from 'react';
-import * as styles from './playbackBar.scss';
+import { css } from 'glamor';
+
+const CSS = css({
+  display: 'flex',
+  height: '64px',
+  width: '400px',
+  padding: '16px 0',
+  justifyContent: 'space-between',
+
+  '& > span': {
+    display: 'inline-block',
+    width: '32px',
+    lineHeight: '32px',
+    textAlign: 'center',
+    cursor: 'pointer'
+  },
+
+  '& .play-icon': {
+    backgroundImage: 'url(./external/media/ic_play.svg)',
+    backgroundSize: '32px',
+    BackgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat'
+  }
+});
 
 interface PlaybackBarState {
   playing?: boolean;
@@ -87,14 +110,14 @@ export default class PlaybackBar extends React.Component<{}, PlaybackBarState> {
 
   render(): JSX.Element {
     return (
-      <div className={ styles.playbackBar }>
+      <div { ...CSS }>
         <span onClick={ this.onClickStartOver }>|&lt;&lt;</span>
         <span onClick={ this.onClickStepBack }>|&lt;</span>
         {
           this.state.playing ?
             <span onClick={ this.onClickPause }>||</span>
             :
-            <span className={ styles.playIcon } onClick={ this.onClickPlay }></span>
+            <span className="play-icon" onClick={ this.onClickPlay }></span>
         }
         <span onClick={ this.onClickStepForward }>&gt;|</span>
         <span onClick={ this.onClickJumpToEnd }>&gt;&gt;|</span>

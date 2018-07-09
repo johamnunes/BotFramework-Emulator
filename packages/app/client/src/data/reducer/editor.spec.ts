@@ -31,32 +31,29 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import editor from './editor';
-import {
-  EditorState,
+import editor, {
   Editor,
-  setDraggingTab,
-  setNewPrimaryEditor,
-  setActiveEditor,
-  setEditorState,
+  EditorState,
+  fixupTabGroups,
   removeDocumentFromTabGroup,
-  fixupTabGroups
+  setActiveEditor,
+  setDraggingTab,
+  setEditorState,
+  setNewPrimaryEditor
 } from './editor';
 import {
-  EditorAction,
   appendTab,
-  toggleDraggingTab,
   close,
+  closeNonGlobalTabs,
+  EditorAction,
+  open,
   setActiveEditor as setActiveEditorAction,
   setActiveTab,
   setDirtyFlag,
-  closeNonGlobalTabs,
-  updateDocument,
-  open,
   splitTab,
   swapTabs,
-  addDocPendingChange,
-  removeDocPendingChange
+  toggleDraggingTab,
+  updateDocument
 } from '../action/editorActions';
 import * as Constants from '../../constants';
 import { deepCopySlow } from '@bfemulator/app-shared';
@@ -89,7 +86,7 @@ describe('Editor reducer tests', () => {
       const srcEditorKey = Constants.EDITOR_KEY_PRIMARY;
       const destEditorKey = Constants.EDITOR_KEY_PRIMARY;
       const docIdToAppend = 'doc1';
-      const action =  appendTab(srcEditorKey, destEditorKey, docIdToAppend);
+      const action = appendTab(srcEditorKey, destEditorKey, docIdToAppend);
       const endingState = editor(startingState, action);
       expect(endingState.editors[Constants.EDITOR_KEY_PRIMARY].tabOrder[0]).not.toBe(docIdToAppend);
       expect(endingState.editors[Constants.EDITOR_KEY_PRIMARY].tabOrder[1]).toBe(docIdToAppend);
@@ -376,8 +373,7 @@ describe('Editor reducer tests', () => {
           recentTabs: ['doc6', 'doc4', 'doc5'],
           tabOrder: ['doc4', 'doc5', 'doc6']
         }
-      },
-      docsWithPendingChanges: ['doc2', 'doc3']
+      }
     };
     const action = closeNonGlobalTabs();
     const endingState = editor(startingState, action);
@@ -393,7 +389,6 @@ describe('Editor reducer tests', () => {
     expect(Object.keys(secondaryEditor.documents)).toHaveLength(2);
     expect(secondaryEditor.recentTabs).toEqual(['doc6', 'doc5']);
     expect(secondaryEditor.tabOrder).toEqual(['doc5', 'doc6']);
-    expect(endingState.docsWithPendingChanges).toEqual([]);
   });
 
   it('should update a document', () => {
@@ -747,44 +742,6 @@ describe('Editor reducer tests', () => {
       expect(secondaryEditor.tabOrder).toEqual([]);
     });
   });
-
-  describe('modifying the list of docs pending changes', () => {
-    it('should add a doc to the list', () => {
-      const startingState: EditorState = {
-        ...defaultState,
-        docsWithPendingChanges: [
-          'doc1',
-          'doc2',
-          'doc3'
-        ]
-      };
-      const action1 = addDocPendingChange('doc4');
-      const endingState1 = editor(startingState, action1);
-
-      expect(endingState1.docsWithPendingChanges).toEqual(['doc1', 'doc2', 'doc3', 'doc4']);
-
-      // shouldn't allow duplicates
-      const action2 = addDocPendingChange('doc4');
-      const endingState2 = editor(endingState1, action2);
-
-      expect(endingState2.docsWithPendingChanges).toEqual(['doc1', 'doc2', 'doc3', 'doc4']);
-    });
-
-    it('should remove a doc from the list', () => {
-      const startingState: EditorState = {
-        ...defaultState,
-        docsWithPendingChanges: [
-          'doc1',
-          'doc2',
-          'doc3'
-        ]
-      };
-      const action = removeDocPendingChange('doc2');
-      const endingState = editor(startingState, action);
-
-      expect(endingState.docsWithPendingChanges).toEqual(['doc1', 'doc3']);
-    });
-  });
 });
 
 describe('Editor reducer utility function tests', () => {
@@ -1023,8 +980,7 @@ function initializeDefaultState() {
         tabOrder: [],
         recentTabs: []
       }
-    },
-    docsWithPendingChanges: []
+    }
   };
   defaultState = deepCopySlow(DEFAULT_STATE);
 }

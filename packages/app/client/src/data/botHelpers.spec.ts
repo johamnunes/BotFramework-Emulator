@@ -49,11 +49,7 @@ jest.mock('./store', () => ({
   }
 }));
 
-import {
-  getActiveBot,
-  getBotInfoByPath,
-  pathExistsInRecentBots
-} from './botHelpers';
+import { getActiveBot, getBotInfoByPath, pathExistsInRecentBots } from './botHelpers';
 
 describe('Bot helpers tests', () => {
   it('should get the active bot', () => {

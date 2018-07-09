@@ -31,7 +31,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import { PresentationAction, disable, enable } from '../action/presentationActions';
+import { disable, enable, PresentationAction } from '../action/presentationActions';
 import presentation, { PresentationState } from './presentation';
 
 describe('Presentation reducer tests', () => {

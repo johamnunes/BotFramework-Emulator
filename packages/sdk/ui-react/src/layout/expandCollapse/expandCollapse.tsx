@@ -56,7 +56,8 @@ export class ExpandCollapse extends React.Component<ExpandCollapseProps, ExpandC
 
   render() {
     const { expanded } = this.state;
-    const { className = '', title, children } = this.props;
+    const { className, title, children } = this.props;
+    const toggleClassName = !expanded ? styles.toggle : `${styles.toggle} ${styles.toggleExpanded}`;
 
     // TODO: Consider <input type="checkbox"> instead of <div />
     return (
@@ -66,7 +67,8 @@ export class ExpandCollapse extends React.Component<ExpandCollapseProps, ExpandC
             className={ styles.actuator }
             href="javascript:void(0);"
             onClick={ this.onActuatorClick }>
-            { this.toggleIcon }
+            <span className={ toggleClassName }>
+            </span>
             { title }
           </a>
           <div className={ styles.accessories }>
@@ -76,27 +78,12 @@ export class ExpandCollapse extends React.Component<ExpandCollapseProps, ExpandC
         <div className={ styles.body }>
           {
             expanded &&
-            <section>
+            <section className={ styles.shadow }>
               { filterChildren(children, child => hmrSafeNameComparison(child.type, ExpandCollapseContent)) }
             </section>
           }
         </div>
       </div>
-    );
-  }
-
-  private get toggleIcon(): JSX.Element {
-    if (this.state.expanded) {
-      return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-          <path d="M11 10.07H5.344L11 4.414v5.656z"/>
-        </svg>
-      );
-    }
-    return (
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-        <path d="M6 4v8l4-4-4-4zm1 2.414L8.586 8 7 9.586V6.414z"/>
-      </svg>
     );
   }
 

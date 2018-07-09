@@ -49,7 +49,7 @@ export function openDispatchDeepLink(dispatchService: IDispatchService): Dispatc
   return {
     type: OPEN_DISPATCH_DEEP_LINK,
     payload: { dispatchService }
-};
+  };
 }
 
 export function openDispatchExplorerContextMenu(dispatchService: IDispatchService)

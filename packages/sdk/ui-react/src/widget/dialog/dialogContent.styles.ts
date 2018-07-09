@@ -1,6 +1,5 @@
 import { IDialogContentStyles } from 'office-ui-fabric-react';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-initializeIcons();
+
 export const dialogContentStyles: IDialogContentStyles = {
   content: {},
   subText: {},

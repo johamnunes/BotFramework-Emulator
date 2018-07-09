@@ -60,6 +60,7 @@ class EmulatorSettingsImpl implements EmulatorSettings {
     }
     return this._url;
   }
+
   set url(value: string) {
     this._url = value;
   }
@@ -89,9 +90,13 @@ export const SettingsService = new class extends DisposableImpl {
 
   private _emulator: EmulatorSettingsImpl;
 
-  get emulator(): EmulatorSettingsImpl { return this._emulator; }
+  get emulator(): EmulatorSettingsImpl {
+    return this._emulator;
+  }
 
-  init() { return null; }
+  init() {
+    return null;
+  }
 
   constructor() {
     super();

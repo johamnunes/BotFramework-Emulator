@@ -8,15 +8,11 @@ export const checkboxStyles: ICheckboxStyles = {
   /**
    * Style for the label part (contains the customized checkbox + text) when enabled.
    */
-  label: {
-    color: 'var(--input-label-color)'
-  },
+  label: {},
   /**
    * Style for checkbox in its default unchecked/enabled state.
    */
-  checkbox: {
-    color: 'var(--input-label-color)'
-  },
+  checkbox: {},
   /**
    * Style for the checkmark in the default enabled/unchecked state.
    */
@@ -24,7 +20,5 @@ export const checkboxStyles: ICheckboxStyles = {
   /**
    * Style for text appearing with the checkbox in its default enabled state.
    */
-  text: {
-    color: 'var(--input-label-color)'
-  },
+  text: {},
 };

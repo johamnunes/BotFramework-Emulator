@@ -35,8 +35,6 @@ import { Document } from '../reducer/editor';
 
 export enum EditorActions {
   appendTab = 'EDITOR/APPEND_TAB',
-  addDocPendingChange = 'EDITOR/ADD_DOC_PENDING_CHANGE',
-  removeDocPendingChange = 'EDITOR/REMOVE_DOC_PENDING_CHANGE',
   close = 'EDITOR/CLOSE',
   closeAll = 'EDITOR/CLOSE_ALL',
   setDirtyFlag = 'EDITOR/SET_DIRTY_FLAG',
@@ -132,34 +130,18 @@ export interface ToggleDraggingTabAction {
   };
 }
 
-export interface AddDocPendingChangeAction {
-  type: EditorActions.addDocPendingChange;
-  payload: {
-    documentId: string;
-  };
-}
-
-export interface RemoveDocPendingChangeAction {
-  type: EditorActions.removeDocPendingChange;
-  payload: {
-    documentId: string;
-  };
-}
-
 export type EditorAction =
-AppendTabAction |
-CloseEditorAction |
-CloseAllEditorAction |
-SetDirtyFlagAction |
-OpenEditorAction |
-UpdateDocumentAction |
-SetActiveTabAction |
-SetActiveEditorAction |
-SplitTabAction |
-SwapTabsAction |
-ToggleDraggingTabAction |
-AddDocPendingChangeAction |
-RemoveDocPendingChangeAction;
+  AppendTabAction |
+  CloseEditorAction |
+  CloseAllEditorAction |
+  SetDirtyFlagAction |
+  OpenEditorAction |
+  UpdateDocumentAction |
+  SetActiveTabAction |
+  SetActiveEditorAction |
+  SplitTabAction |
+  SwapTabsAction |
+  ToggleDraggingTabAction;
 
 export function appendTab(srcEditorKey: string, destEditorKey: string, documentId: string): AppendTabAction {
   return {
@@ -167,24 +149,6 @@ export function appendTab(srcEditorKey: string, destEditorKey: string, documentI
     payload: {
       srcEditorKey,
       destEditorKey,
-      documentId
-    }
-  };
-}
-
-export function addDocPendingChange(documentId: string): AddDocPendingChangeAction {
-  return {
-    type: EditorActions.addDocPendingChange,
-    payload: {
-      documentId
-    }
-  };
-}
-
-export function removeDocPendingChange(documentId: string): RemoveDocPendingChangeAction {
-  return {
-    type: EditorActions.removeDocPendingChange,
-    payload: {
       documentId
     }
   };
@@ -234,7 +198,7 @@ export function open(contentType: string, documentId: string, isGlobal: boolean,
 export function updateDocument(documentId: string, updatedDocument: Partial<Document>): UpdateDocumentAction {
   return {
     type: EditorActions.updateDocument,
-      payload: { documentId, ...updatedDocument }
+    payload: { documentId, ...updatedDocument }
   };
 }
 

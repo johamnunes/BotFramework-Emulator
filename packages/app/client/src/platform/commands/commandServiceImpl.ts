@@ -45,9 +45,13 @@ export const CommandServiceImpl = new class extends DisposableImpl implements Co
 
   private readonly _service: InternalSharedService;
 
-  init() { return null; }
+  init() {
+    return null;
+  }
 
-  public get registry() { return this._service.registry; }
+  public get registry() {
+    return this._service.registry;
+  }
 
   constructor() {
     super();

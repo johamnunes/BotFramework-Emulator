@@ -31,10 +31,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import {
-  luisAuthoringDataChanged,
-  luisAuthStatusChanged
-} from '../action/luisAuthActions';
+import { luisAuthoringDataChanged, luisAuthStatusChanged } from '../action/luisAuthActions';
 import luisAuth, { LuisAuthState } from './luisAuthReducer';
 
 describe('Luis auth reducer tests', () => {

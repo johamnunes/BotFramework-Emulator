@@ -4,7 +4,6 @@
   height: 100%;
   min-height: 22px;
   overflow: hidden;
-
   &[aria-expanded="true"] {
     margin-bottom: 15px;
   }
@@ -40,11 +39,16 @@
           right: 0;
         }
       }
-      & > svg {
+      & > .toggle {
         height: 12px;
         width: 12px;
         margin-right: 8px;
+        background: no-repeat 50% 50% url("../../media/toggle-collapsed.svg");
+        background-size: 18px;
         fill: var(--explorer-panel-group-title-color);
+        &.toggleExpanded {
+          background: no-repeat 50% 50% url("../../media/toggle-expanded.svg");
+        }
       }
 
       & .accessories {
@@ -72,4 +76,8 @@
       flex-flow: column nowrap
     }
   }
+}
+
+.shadow {
+  box-shadow: var(--box-shadow-top);
 }
